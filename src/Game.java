@@ -134,7 +134,8 @@ public class Game {
         int rowNum = index / dimension;
         int columnNum = index % dimension;
         boolean winFlag = true;
-        boolean diagonal = true;
+        boolean mainDiagonal = rowNum == columnNum;
+        boolean secondaryDiagonal = columnNum + rowNum == dimension -1;
         for (int i = rowNum * dimension; i <= rowNum * dimension + 2; i++) {
             if (arr[i] != 1 && isX || arr[i] != 2 && !isX) {
                 winFlag = false;
@@ -160,33 +161,60 @@ public class Game {
             winFlag = !winFlag;
         }
 
-//        diagonal = index % (dimension + 1) == 0;
-        for (int i = 0; i < arr.length; i = i + 4) {
-            if (arr[i] != 1 && isX || arr[i] != 2 && !isX) {
-                winFlag = false;
-                break;
+////        diagonal = index % (dimension + 1) == 0;
+//        for (int i = 0; i < arr.length; i = i + 4) {
+//            if (arr[i] != 1 && isX || arr[i] != 2 && !isX) {
+//                winFlag = false;
+//                break;
+//            }
+//
+//        }
+//        if (winFlag) {
+//            return winFlag;
+//        } else {
+//            winFlag = !winFlag;
+//        }
+//
+//        for (int i = 2; i <= 6; i = i + 2) {
+//            if (arr[i] != 1 && isX || arr[i] != 2 && !isX) {
+//                winFlag = false;
+//                break;
+//            }
+//
+//        }
+//
+//
+////        требование проверка на побочную диагональ должна выполняться только в том случае
+////        если индекс лежит на побочной диагонали, как в примере выше
+//
+//        return winFlag;
+
+
+        if (mainDiagonal) {
+            for (int i = 0; i < arr.length; i += dimension + 1) {
+                if ((isX && arr[i] != 1) || (!isX && arr[i] != 2)) {
+                    winFlag = false;
+                    break;
+                }
             }
-
-        }
-        if (winFlag) {
-            return winFlag;
-        } else {
-            winFlag = !winFlag;
+            if (winFlag) {
+                return true;
+            } else winFlag = true;
         }
 
-        for (int i = 2; i <= 6; i = i + 2) {
-            if (arr[i] != 1 && isX || arr[i] != 2 && !isX) {
-                winFlag = false;
-                break;
+        //secondaryDiag
+        if (secondaryDiagonal) {
+            for (int i = dimension - 1; i <= dimension * (dimension - 1); i += dimension - 1) {
+                if ((isX && arr[i] != 1) || (!isX && arr[i] != 2)) {
+                    winFlag = false;
+                    break;
+                }
             }
-
+            if (winFlag) {
+                return true;
+            }
         }
-
-
-//        требование проверка на побочную диагональ должна выполняться только в том случае
-//        если индекс лежит на побочной диагонали, как в примере выше
-
-        return winFlag;
+        return false;
     }
 }
 
